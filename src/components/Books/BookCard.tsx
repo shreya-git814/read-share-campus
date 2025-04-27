@@ -26,7 +26,7 @@ const BookCard = ({ book, isWishlisted = false, onWishlistToggle, className = ''
   };
 
   return (
-    <div className={`card animate-fade-in ${className}`}>
+    <div className={`card fade-in-element ${className}`}>
       <Link to={`/book/${book.id}`}>
         <div className="relative">
           <img 

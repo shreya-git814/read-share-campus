@@ -72,7 +72,19 @@
     @apply w-full px-3 py-2 border border-muted rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30;
   }
   
-  .animate-fade-in {
-    @apply opacity-0 animate-fade-in;
+  .fade-in-element {
+    @apply opacity-0;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

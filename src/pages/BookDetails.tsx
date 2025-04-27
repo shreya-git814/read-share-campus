@@ -178,7 +178,7 @@ const BookDetails = () => {
                 
                 {/* Contact Form */}
                 {showContactForm && (
-                  <div className="mt-6 animate-fade-in">
+                  <div className="mt-6 fade-in-element">
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h3 className="font-medium text-gray-900 mb-3">Message the Seller</h3>
                       <form onSubmit={handleContactSeller}>
