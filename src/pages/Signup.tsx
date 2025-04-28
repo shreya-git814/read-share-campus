@@ -1,25 +1,45 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import AuthForm from '@/components/Auth/AuthForm';
 import { BookOpen } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 
 const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { signup } = useAuth();
+  const { toast } = useToast();
   
-  const handleSubmit = (formData: any) => {
+  const handleSubmit = async (formData: any) => {
     setIsLoading(true);
     
-    // Mock signup - in a real app, this would be an API call
-    console.log('Signing up with:', formData);
-    
-    // Simulate API delay
-    setTimeout(() => {
+    try {
+      const success = await signup(formData.name, formData.email, formData.password);
+      
+      if (success) {
+        toast({
+          title: "Account created",
+          description: "Welcome to CampusBooks!",
+        });
+        navigate("/dashboard");
+      } else {
+        toast({
+          title: "Signup failed",
+          description: "Please check your information and try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Signup error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-      navigate('/dashboard');
-    }, 1500);
+    }
   };
   
   return (

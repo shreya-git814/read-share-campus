@@ -1,25 +1,49 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import AuthForm from '@/components/Auth/AuthForm';
 import { BookOpen } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
+  const { toast } = useToast();
   
-  const handleSubmit = (formData: any) => {
+  // Get redirect path from location state or default to dashboard
+  const from = location.state?.from?.pathname || "/dashboard";
+  
+  const handleSubmit = async (formData: any) => {
     setIsLoading(true);
     
-    // Mock login - in a real app, this would be an API call
-    console.log('Logging in with:', formData);
-    
-    // Simulate API delay
-    setTimeout(() => {
+    try {
+      const success = await login(formData.email, formData.password);
+      
+      if (success) {
+        toast({
+          title: "Login successful",
+          description: "Welcome back to CampusBooks!",
+        });
+        navigate(from, { replace: true });
+      } else {
+        toast({
+          title: "Login failed",
+          description: "Please check your email and password.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Login error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-      navigate('/dashboard');
-    }, 1500);
+    }
   };
   
   return (
